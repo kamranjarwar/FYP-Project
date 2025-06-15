@@ -1,0 +1,31 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+<h1>Details for {{ vehicle.number_plate }}</h1>
+<ul>
+    <li><strong>Vehicle Type:</strong> {{ vehicle.get_vehicle_type_display }}</li>
+    <li><strong>Make:</strong> {{ vehicle.make }}</li>
+    <li><strong>Model:</strong> {{ vehicle.model }}</li>
+    <li><strong>Variant:</strong> {{ vehicle.variant }}</li>
+    <li><strong>Country:</strong> {{ vehicle.country }}</li>
+    <li><strong>Registration Date:</strong> {{ vehicle.registration_date }}</li>
+    <li><strong>Tax Status:</strong> 
+        {% if vehicle.tax_status %}
+            <span style="color:green;">Paid</span>
+        {% else %}
+            <span style="color:red;">Unpaid</span>
+        {% endif %}
+    </li>
+    <li><strong>Registered Owner:</strong> {{ vehicle.registered_owner }}</li>
+    <li><strong>Owner Address:</strong> {{ vehicle.owner_address }}</li>
+    <li><strong>Owner's Father Name:</strong> {{ vehicle.owner_fathers_name }}</li>
+    <li><strong>Blacklist Status:</strong> 
+        {% if vehicle.is_blacklisted %}
+            <span style="color: red; font-weight: bold;">Blacklisted</span>
+        {% else %}
+            <span style="color: green;">CLEAR</span>
+        {% endif %}
+    </li>
+</ul>
+<a href="{% url 'vehicles_list' %}">Back to List</a>
+{% endblock %}

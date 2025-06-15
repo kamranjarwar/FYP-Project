@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Live Detection | PlateCheck</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/PlateCheckfavicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/PlateCheckfavicon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main1.css' %}" rel="stylesheet">
+  
+  <style>
+      
+      .container-live {
+          max-width: 90%;
+          margin: 20px auto;
+          margin-top: 2%;
+          margin-bottom: 20%;
+          
+      }
+      .live-feed {
+          text-align: center;
+          margin-bottom: 20px;
+      }
+      .live-feed img {
+          max-width: 100%;
+          height: auto;
+          border: 5px solid #3498db;
+          border-radius: 10px;
+      }
+      .table {
+          background-color: #fff;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .table th, .table td {
+          text-align: center;
+          padding: 12px;
+      }
+      .table th {
+          background-color: #3498db;
+          color: #fff;
+      }
+      .badge-success {
+          background-color: rgb(17, 184, 17);
+      }
+      .button {
+          background-color: #3498db;
+          color: white;
+          padding: 3px 6px;
+          border-radius: 5px;
+          text-decoration: none;
+          font-weight: bold;
+          transition: background-color 0.3s ease;
+          display: inline-block;
+          font-size: small;
+      }
+      .button:hover {
+          background-color: #2980b9;
+      }
+      .empty-message {
+          font-style: italic;
+          color: #7f8c8d;
+      }
+      .reload-btn {
+          margin: 15px auto;
+          display: block;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+          .container-live {
+              max-width: 100%;
+              padding: 0 10px;
+              margin-bottom: 15%;
+          }
+          .table th, .table td {
+              font-size: 14px;
+              padding: 8px;
+          }
+          .button {
+              padding: 4px 8px;
+              font-size: 12px;
+          }
+          h2 {
+              font-size: 20px;
+          }
+      }
+
+      @media (max-width: 480px) {
+          .live-feed img {
+              border-width: 3px;
+          }
+          .table th, .table td {
+              font-size: 12px;
+              padding: 6px;
+          }
+          .button {
+              padding: 3px 6px;
+              font-size: 11px;
+          }
+          .reload-btn {
+              font-size: 14px;
+              padding: 8px 12px;
+          }
+
+          .container-live{
+            margin-top: 2%;
+            margin-bottom: 50%;
+          }
+      }
+  </style>
+
+  <style>
+  
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+  }
+
+  .navbar-toggler {
+    order: 1;
+  }
+
+  .navbar-brand {
+    order: 0;
+  }
+
+  .btn-login {
+    order: 2;
+    margin-left: 0;
+    margin-top: 10px;
+    
+  }
+  .dropdown {
+    order: 2;
+    margin-left: 0;
+    margin-bottom: 10px;
+    
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-login   {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 10px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+  }
+
+  .dropdown-toggle {
+    font-size: 14px;
+  }
+
+  .dropdown-menu {
+    min-width: 150px;
+  }
+}
+  </style>
+  
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+  
+      <!-- Logo -->
+      <a href="{% url 'home' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/PlateCheck.png' %}" alt="logo">
+      </a>
+  
+      <!-- Navigation Menu -->
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'home' %}#hero" class="active">Home</a></li>
+          <li><a href="{% url 'home' %}#about">About</a></li>
+          <li><a href="{% url 'home' %}#services">Services</a></li>
+          <li><a href="{% url 'home' %}#contact">Contact</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav> &nbsp; &nbsp;
+  
+      <!-- User Profile/Login Section -->
+      {% if user.is_authenticated %}
+      <div class="dropdown me-3">
+        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          {% if user.userprofile.photo %}
+            <img src="{{ user.userprofile.photo.url }}" alt="User Photo" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+          {% else %}
+            <i class="bi bi-person-circle" style="font-size: 40px; color: #333;"></i>
+          {% endif %}
+          <span class="ms-2 fw-bold">{{ user.first_name|default:"Guest" }}</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" 
+            style="position: absolute; top: 100%; right: 0; background-color: #fff; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); min-width: 200px; padding: 5px;">
+            <li><strong class="dropdown-item" style="padding: 10px; font-size: 14px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"><i>{{ user.email }}</i></strong></li>
+            <li><a class="dropdown-item" href="{% url 'profile' %}" 
+                   style="padding: 10px; display: block; text-decoration: none; color: #007bff; font-size: 14px;">Profile</a></li>
+            <li><hr class="dropdown-divider" style="margin: 5px 0; border-color: #ddd;"></li>
+            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}" 
+                   style="padding: 10px; display: block; text-decoration: none; color: #dc3545; font-size: 14px;">Logout</a></li>
+        </ul>
+    </div>
+{% else %}
+    <!-- Login Button -->
+    <a class="btn-login btn-primary " href="{% url 'login' %}" 
+       style="display: inline-block; background-color: #3498db; border: none; padding: 8px 15px; color: #fff; border-radius: 15px; text-decoration: none; font-size: 14px;">Login</a>
+{% endif %}
+
+      </div>
+  </header>
+
+  <div class="container-live">
+    <h2 class="text-center mb-4">Live Detection</h2>
+    <div class="live-feed">
+        <img src="/live_feed/" alt="Live Feed" id="liveFeed">
+    </div>
+
+    <h2 class="text-center mb-4">Detected License Plates</h2>
+    <button id="reloadButton" class="btn btn-primary reload-btn">Reload Detected Plates</button>
+
+    <div id="tableContainer">
+        <table class="table table-bordered table-responsive">
+            <thead>
+                <tr>
+                    <th>Plate Number</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody id="vehicleTableBody">
+                {% for vehicle in detected_vehicles %}
+                <tr>
+                    <td>{{ vehicle.number_plate }}</td>
+                    <td><span class="badge badge-success">Detected</span></td>
+                    <td><a href="{% url 'details' vehicle.id %}" class="button">View Details</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="empty-message text-center">No detected vehicles found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+<footer id="footer" class="footer">
+
+    <div class="container">
+      <div class="copyright text-center ">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">Plate Check</strong> <span>All Rights Reserved 2025</span></p>
+      </div>
+      <div class="social-links d-flex justify-content-center">
+        <a href=""><i class="bi bi-twitter-x"></i></a>
+        <a href=""><i class="bi bi-facebook"></i></a>
+        <a href=""><i class="bi bi-instagram"></i></a>
+        <a href=""><i class="bi bi-linkedin"></i></a>
+      </div>
+      <!-- <div class="credits">
+        
+        Designed by <a href="">DevHabit Innovations</a>
+      </div> -->
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#reloadButton').click(function() {
+            $('#tableContainer').load(location.href + ' #tableContainer > *');
+        });
+    });
+</script>
+
+</body>
+
+</html>

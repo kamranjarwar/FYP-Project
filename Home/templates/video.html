@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle and License Plate Detection</title>
+    <!-- Bootstrap CSS for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJv+uY7I4dMEhLkMy5Fqtf4DgD3FhgqBLxN7AOykihihDqDydKKP6jdxNDB3" crossorigin="anonymous">
+    
+    <style>
+        /* Custom styling */
+        .container {
+            margin-top: 50px;
+        }
+        .video-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .video-container video {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 20px;
+        }
+        .result-table {
+            margin-top: 20px;
+        }
+        .result-table th, .result-table td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Title -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="text-center">Vehicle and License Plate Detection</h1>
+        </div>
+    </div>
+
+    <!-- Video Upload Form -->
+    <div class="row">
+        <div class="col">
+            <h3>Upload Video for Detection</h3>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Upload Video</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Display Video -->
+    {% if video %}
+    <div class="row video-container">
+        <div class="col">
+            <video controls>
+                <source src="{{ video }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Display Detection Results -->
+    {% if frames %}
+    <div class="row result-table">
+        <div class="col">
+            <h3>Detection Results</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Frame</th>
+                        <th>Car ID</th>
+                        <th>License Plate</th>
+                        <th>License Plate Score</th>
+                        <th>Car Coordinates</th>
+                        <th>License Plate Coordinates</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for frame_num, frame_results in frames.items %}
+                        {% for car_id, car_info in frame_results.items %}
+                            <tr>
+                                <td>{{ frame_num }}</td>
+                                <td>{{ car_id }}</td>
+                                <td>{{ car_info.license_plate.text }}</td>
+                                <td>{{ car_info.license_plate.text_score }}</td>
+                                <td>{{ car_info.car.bbox }}</td>
+                                <td>{{ car_info.license_plate.bbox }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- Bootstrap JS and Popper.js for optional components -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gybN3fF1u9z4jYrwZ+2pDAbjzjof3yq9TwV7FlRo1tInJhjfJd" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-pzjw8f+ua7Kw1TIq0d3L0L10cJl1++a3b5fpQ11f0g1a6+/b6Q4zF7wqp4E0P4M" crossorigin="anonymous"></script>
+
+</body>
+</html>

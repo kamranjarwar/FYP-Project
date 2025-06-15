@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Profile | PlateCheck</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/PlateCheckfavicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/PlateCheckfavicon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
+  
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main1.css' %}" rel="stylesheet">
+
+  
+  <style>
+      
+
+      .container-profile {
+          max-width: 960px;
+          margin: 50px auto;
+          background: #fff;
+          border-radius: 16px;
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+          padding: 40px;
+      }
+
+      .header-profile {
+          background-color: #3498db;
+          color: white;
+          padding: 25px;
+          text-align: center;
+          font-size: 2em;
+          border-radius: 12px;
+          margin-bottom: 40px;
+      }
+
+      .profile-card {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 30px;
+          padding-bottom: 20px;
+          border-bottom: 2px solid #e0e0e0;
+      }
+
+      .profile-photo {
+          width: 140px;
+          height: 140px;
+          border-radius: 50%;
+          background-color: #ddd;
+          margin-right: 30px;
+          object-fit: cover;
+          transition: transform 0.3s ease;
+      }
+
+      .profile-photo:hover {
+          transform: scale(1.1);
+      }
+
+      .profile-details {
+          flex: 1;
+      }
+
+      .profile-details h2 {
+          margin: 0;
+          font-size: 30px;
+          font-weight: bold;
+          color: #333;
+          display: flex;
+          align-items: center;
+      }
+
+      .admin-badge {
+          background-color: #27ae60;
+          color: white;
+          padding: 2px 12px;
+          border-radius: 20px;
+          font-size: 12px;
+          margin-left: 15px;
+      }
+
+      .profile-details p {
+          font-size: 18px;
+          margin: 10px 0;
+          color: #777;
+      }
+
+      .action-btns {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 25px;
+      }
+
+      .action-btns button {
+          background-color: #3498db;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          padding: 14px 20px;
+          font-size: 16px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          display: flex;
+          align-items: center;
+          min-width: 160px;
+      }
+
+      .action-btns button:hover {
+          background-color: #2980b9;
+      }
+
+      .action-btns button i {
+          margin-right: 10px;
+      }
+
+      .action-btns .danger-btn {
+          background-color: #e74c3c;
+      }
+
+      .action-btns .danger-btn:hover {
+          background-color: #c0392b;
+      }
+
+      .form-section {
+          margin-bottom: 30px;
+      }
+
+      .form-section h3 {
+          font-size: 24px;
+          margin-bottom: 15px;
+          color: #333;
+      }
+
+      .form-section input,
+      .form-section textarea {
+          width: 100%;
+          padding: 14px;
+          margin-bottom: 15px;
+          border-radius: 8px;
+          font-size: 16px;
+          border: 1px solid #ccc;
+          transition: border-color 0.3s;
+      }
+
+      .form-section input:focus,
+      .form-section textarea:focus {
+          border-color: #3498db;
+      }
+
+      .form-section button {
+          background-color: #3498db;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          padding: 14px 20px;
+          font-size: 16px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          min-width: 160px;
+      }
+
+      .form-section button:hover {
+          background-color: #2980b9;
+      }
+
+      .form-section input[type="file"] {
+          padding: 10px 14px;
+      }
+
+      @media (max-width: 768px) {
+          .profile-card {
+              flex-direction: column;
+              align-items: center;
+              text-align: center;
+          }
+
+          .profile-photo {
+              margin-bottom: 20px;
+          }
+
+          .action-btns {
+              flex-direction: column;
+              align-items: center;
+          }
+
+          .action-btns button {
+              width: 80%;
+              margin-bottom: 15px;
+          }
+
+          .form-section input,
+          .form-section textarea {
+              padding: 12px;
+          }
+      }
+  </style>
+
+  
+  <style>
+  
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+  }
+
+  .navbar-toggler {
+    order: 1;
+  }
+
+  .navbar-brand {
+    order: 0;
+  }
+
+  .btn-login {
+    order: 2;
+    margin-left: 0;
+    margin-top: 10px;
+    
+  }
+  .dropdown {
+    order: 2;
+    margin-left: 0;
+    margin-bottom: 10px;
+    
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-login   {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 10px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+  }
+
+  .dropdown-toggle {
+    font-size: 14px;
+  }
+
+  .dropdown-menu {
+    min-width: 150px;
+  }
+}
+  </style>
+  
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+  
+      <!-- Logo -->
+      <a href="{% url 'home' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/PlateCheck.png' %}" alt="logo">
+      </a>
+  
+      <!-- Navigation Menu -->
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'home' %}#hero" class="active">Home</a></li>
+          <li><a href="{% url 'home' %}#about">About</a></li>
+          <li><a href="{% url 'home' %}#services">Services</a></li>
+          <li><a href="{% url 'home' %}#contact">Contact</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav> &nbsp; &nbsp;
+  
+      <!-- User Profile/Login Section -->
+      {% if user.is_authenticated %}
+      <div class="dropdown me-3">
+        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          {% if user.userprofile.photo %}
+            <img src="{{ user.userprofile.photo.url }}" alt="User Photo" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+          {% else %}
+            <i class="bi bi-person-circle" style="font-size: 40px; color: #333;"></i>
+          {% endif %}
+          <span class="ms-2 fw-bold">{{ user.first_name|default:"Guest" }}</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" 
+            style="position: absolute; top: 100%; right: 0; background-color: #fff; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); min-width: 200px; padding: 5px;">
+            <li><strong class="dropdown-item" style="padding: 10px; font-size: 14px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"><i>{{ user.email }}</i></strong></li>
+            <li><a class="dropdown-item" href="{% url 'profile' %}" 
+                   style="padding: 10px; display: block; text-decoration: none; color: #007bff; font-size: 14px;">Profile</a></li>
+            <li><hr class="dropdown-divider" style="margin: 5px 0; border-color: #ddd;"></li>
+            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}" 
+                   style="padding: 10px; display: block; text-decoration: none; color: #dc3545; font-size: 14px;">Logout</a></li>
+        </ul>
+    </div>
+{% else %}
+    <!-- Login Button -->
+    <a class="btn-login btn-primary " href="{% url 'login' %}" 
+       style="display: inline-block; background-color: #3498db; border: none; padding: 8px 15px; color: #fff; border-radius: 15px; text-decoration: none; font-size: 14px;">Login</a>
+{% endif %}
+
+      </div>
+  </header>
+
+  <div class="container-profile">
+    <div class="header-profile">
+        User Profile
+    </div>
+
+    <div class="profile-card">
+        {% if user.userprofile.photo %}
+            <img src="{{ user_profile.photo.url }}" alt="Profile Photo" class="profile-photo">
+        {% else %}
+            <i class="bi bi-person-circle profile-photo" style="font-size: 140px; color: #777;"></i>
+        {% endif %}
+
+        <div class="profile-details">
+            <h2>{{ user.first_name }} {{ user.last_name }} 
+                {% if user.is_staff %}
+                    <span class="admin-badge">Admin</span>
+                {% endif %}
+            </h2>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Phone:</strong>  {{ user_profile.phone_number }}</p>
+            <p><strong>Description:</strong>  {{ user_profile.description }}</p>
+        </div>
+    </div>
+
+    <div class="action-btns">
+        <button onclick="toggleEditProfile()">
+            <i class="bi bi-pencil-square"></i> Edit Profile
+        </button>
+        <button onclick="toggleResetPassword()">
+            <i class="bi bi-key"></i> Reset Password
+        </button>
+        <form method="POST" action="{% url 'delete-account' %}">
+            {% csrf_token %}
+            <button type="submit" class="danger-btn">
+                <i class="bi bi-trash"></i> Delete Account
+            </button>
+        </form>
+    </div>
+
+    <div class="edit-profile" style="display: none;">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-section">
+                <h3>Edit Profile</h3>
+                <input type="text" name="first_name" value="{{ user.first_name }}" placeholder="First Name">
+                <input type="text" name="last_name" value="{{ user.last_name }}" placeholder="Last Name">
+                <input type="email" name="email" value="{{ user.email }}" placeholder="Email">
+                <input type="text" name="phone_number" value="{{ user_profile.phone_number }}" placeholder="Phone Number">
+                <textarea name="description" placeholder="Description" rows="4">{{ user_profile.description }}</textarea>
+                <input type="file" name="photo" placeholder="Profile Photo">
+                <button type="submit" name="edit_profile">Update Profile</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="reset-password" style="display: none;">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-section">
+                <h3>Reset Password</h3>
+                {{ password_form.as_p }}
+                <button type="submit" name="reset_password">Change Password</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+<footer id="footer" class="footer">
+
+    <div class="container">
+      <div class="copyright text-center ">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">Plate Check</strong> <span>All Rights Reserved 2025</span></p>
+      </div>
+      <div class="social-links d-flex justify-content-center">
+        <a href=""><i class="bi bi-twitter-x"></i></a>
+        <a href=""><i class="bi bi-facebook"></i></a>
+        <a href=""><i class="bi bi-instagram"></i></a>
+        <a href=""><i class="bi bi-linkedin"></i></a>
+      </div>
+      <!-- <div class="credits">
+        
+        Designed by <a href="">DevHabit Innovations</a>
+      </div> -->
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+  <script>
+    function toggleEditProfile() {
+        var editProfileSection = document.querySelector('.edit-profile');
+        editProfileSection.style.display = (editProfileSection.style.display === "none" || editProfileSection.style.display === "") ? "block" : "none";
+    }
+
+    function toggleResetPassword() {
+        var resetPasswordSection = document.querySelector('.reset-password');
+        resetPasswordSection.style.display = (resetPasswordSection.style.display === "none" || resetPasswordSection.style.display === "") ? "block" : "none";
+    }
+</script>
+
+</body>
+
+</html>

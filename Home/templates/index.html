@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>PlateCheck</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/PlateCheckfavicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/PlateCheckfavicon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/Main1.css' %}" rel="stylesheet">
+
+
+  <style>
+  
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+  }
+
+  .navbar-toggler {
+    order: 1;
+  }
+
+  .navbar-brand {
+    order: 0;
+  }
+
+  .btn-login {
+    order: 2;
+    margin-left: 0;
+    margin-top: 10px;
+    
+  }
+  .dropdown {
+    order: 2;
+    margin-left: 0;
+    margin-bottom: 10px;
+    
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-login   {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 10px;
+    margin-right: 10px;
+    margin-bottom: 15px;
+  }
+
+  .dropdown-toggle {
+    font-size: 14px;
+  }
+
+  .dropdown-menu {
+    min-width: 150px;
+  }
+}
+  </style>
+
+<style>
+  /* Style for the alert card (modal) */
+.alert-card {
+    display: none;  /* Initially hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);  /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;  /* Ensure it's on top */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Style for the content inside the alert card */
+.alert-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Fade-in effect when the alert is shown */
+.alert-card.show {
+    display: flex;  /* Show the modal */
+    opacity: 1;     /* Fade in */
+}
+
+/* Style the Close button */
+#close-alert {
+    margin-top: 15px;
+    padding: 8px 15px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#close-alert:hover {
+    background-color: #3498db;
+}
+
+</style>
+  
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+  
+      <!-- Logo -->
+      <a href="{% url 'home' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/PlateCheck.png' %}" alt="logo">
+      </a>
+  
+      <!-- Navigation Menu -->
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'home' %}#hero" class="active">Home</a></li>
+          <li><a href="{% url 'home' %}#about">About</a></li>
+          <li><a href="{% url 'home' %}#services">Services</a></li>
+          <li><a href="{% url 'home' %}#contact">Contact</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav> &nbsp; &nbsp;
+  
+      <!-- User Profile/Login Section -->
+      {% if user.is_authenticated %}
+      <div class="dropdown me-3">
+        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          {% if user.userprofile.photo %}
+            <img src="{{ user.userprofile.photo.url }}" alt="User Photo" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+          {% else %}
+            <i class="bi bi-person-circle" style="font-size: 40px; color: #333;"></i>
+          {% endif %}
+          <span class="ms-2 fw-bold">{{ user.first_name|default:"Guest" }}</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" 
+            style="position: absolute; top: 100%; right: 0; background-color: #fff; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); min-width: 200px; padding: 5px;">
+            <li><strong class="dropdown-item" style="padding: 10px; font-size: 14px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;"><i>{{ user.email }}</i></strong></li>
+            <li><a class="dropdown-item" href="{% url 'profile' %}" 
+                   style="padding: 10px; display: block; text-decoration: none; color: #007bff; font-size: 14px;">Profile</a></li>
+            <li><hr class="dropdown-divider" style="margin: 5px 0; border-color: #ddd;"></li>
+            <li><a class="dropdown-item text-danger" href="{% url 'logout' %}" 
+                   style="padding: 10px; display: block; text-decoration: none; color: #dc3545; font-size: 14px;">Logout</a></li>
+        </ul>
+    </div>
+{% else %}
+    <!-- Login Button -->
+    <a class="btn-login btn-primary " href="{% url 'login' %}" 
+       style="display: inline-block; background-color: #3498db; border: none; padding: 8px 15px; color: #fff; border-radius: 15px; text-decoration: none; font-size: 14px;">Login</a>
+{% endif %}
+
+      </div>
+  </header>
+  
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section">
+
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
+            <h1>Verify Number Plates with Plate Check</h1>
+            <p>Our advanced verification system automatically detects and provides detailed information about number plates, enhancing security and efficiency.</p>
+
+            <div class="d-flex">
+              <a href="{% url 'register' %}" class="btn-get-started">Get Started</a>
+            </div>
+          </div>
+          <div class="col-lg-6 order-1 order-lg-2 hero-img">
+            <img src="{% static 'assets/img/numpc1.jpg' %}" class="img-fluid animated" alt="hero-img" style="border-radius: 40px; ">
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /Hero Section -->
+
+    
+
+    <!-- About Section -->
+<section id="about" class="about section">
+
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>About Us</h2>
+    <p>Revolutionizing vehicle tracking and management with AI-powered Number Plate Recognition (NPR) and OCR technology.</p>
+  </div><!-- End Section Title -->
+
+  <div class="container">
+
+    <div class="row gy-5">
+
+      <div class="content col-xl-5 d-flex flex-column" data-aos="fade-up" data-aos-delay="100">
+        <h3>AI & OCR for Smarter Vehicle Tracking</h3>
+        <p>
+            Our cutting-edge NPR system utilizes Artificial Intelligence (AI) and Optical Character Recognition (OCR) 
+            to automatically detect and read vehicle number plates in real-time. This technology offers accurate, 
+            efficient, and secure vehicle monitoring for various applications such as parking management, security systems, 
+            and fleet tracking.
+        </p>
+        <a href="javascript:void(0);" class="about-btn align-self-center align-self-xl-start" onclick="showInfo()">
+            <span>Learn More</span> <i class="bi bi-chevron-right"></i>
+        </a>
+    </div>
+    
+    <!-- Hidden Info Box -->
+    <div id="infoBox" style="display: none; padding: 20px; background-color: #f8f9fa; border: 1px solid #ddd; border-radius: 10px; margin-top: 20px;">
+        <h4>Advanced Technology in Vehicle Tracking 🚗</h4>
+        <p>
+            Our NPR system leverages AI algorithms and OCR to enhance vehicle tracking accuracy. 
+            It reduces manual effort, improves security, and provides real-time insights for smarter 
+            transportation management.  
+        </p>
+        <button onclick="hideInfo()" style="background-color: #dc3545; color: white; border: none; padding: 10px 15px; border-radius: 5px;">Close</button>
+    </div>
+    
+    
+
+      <div class="col-xl-7" data-aos="fade-up" data-aos-delay="200">
+        <div class="row gy-4">
+
+          <div class="col-md-6 icon-box position-relative">
+            <i class="bi bi-camera"></i>
+            <h4 class="stretched-link"> Real-Time Number Plate Recognition</h4>
+            <p>Our AI-powered NPR system instantly captures and recognizes vehicle number plates, ensuring accurate and quick data retrieval.</p>
+          </div><!-- Icon-Box -->
+
+          <div class="col-md-6 icon-box position-relative">
+            <i class="bi bi-file-earmark-text"></i>
+            <h4 class="stretched-link">OCR for Precise Data Extraction</h4>
+            <p>Using Optical Character Recognition, we extract and store vehicle number plate data with high accuracy and speed.</p>
+          </div><!-- Icon-Box -->
+
+          <div class="col-md-6 icon-box position-relative">
+            <i class="bi bi-shield-lock"></i>
+            <h4 class="stretched-link">Enhanced Security<h4>
+            <p>Our system ensures secure vehicle tracking, contributing to better surveillance and real-time monitoring for businesses and authorities.</p>
+          </div><!-- Icon-Box -->
+
+          <div class="col-md-6 icon-box position-relative">
+            <i class="bi bi-speedometer"></i>
+            <h4 class="stretched-link">Fast & Efficient Processing</h4>
+            <p>The integration of AI and OCR enables rapid processing, ensuring real-time vehicle tracking with minimal delay.</p>
+          </div><!-- Icon-Box -->
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section><!-- /About Section -->
+
+
+
+
+ <!-- Modal Alert (Card) -->
+ <div id="alert-card" class="alert-card">
+  <div class="alert-content">
+      <p>Sorry, you can't access this Service. Please <a href="{% url 'login' %}">log in</a> first.</p>
+      <button id="close-alert">Close</button>
+  </div>
+</div>
+
+
+    <!-- Services Section -->
+<section id="services" class="services section auth-required">
+
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Services</h2>
+    <p>Our platform offers a diverse range of innovative services designed to make your experience smoother</p>
+  </div><!-- End Section Title -->
+
+  <div class="container">
+    <div class="row gy-4 justify-content-center">
+
+      <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
+        <div class="service-item position-relative">
+          <i class="bi bi-search"></i>
+          <h4><a href="{% url 'quick-search' %}" class="stretched-link ">Quick Search</a></h4>
+          <p>Effortlessly search for vehicle number plates by entering the number directly allows for fast and accurate tracking </p>
+        </div>
+      </div><!-- End Service Item -->
+
+      <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="200">
+        <div class="service-item position-relative">
+          <i class="bi bi-image"></i>
+          <h4><a href="{% url 'image-detection' %}" class="stretched-link">Detect With Image</a></h4>
+          <p>Upload a static image of a vehicle, and our system will detect and read the number plate with high accuracy.</p>
+        </div>
+      </div><!-- End Service Item -->
+
+      <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="300">
+        <div class="service-item position-relative">
+          <i class="bi bi-camera-video"></i>
+          <h4><a href="{% url 'live-detection' %}" class="stretched-link">Detect With Live Streaming</a></h4>
+          <p>Use live video feeds to detect and read number plates in real-time, providing seamless and continuous vehicle monitoring.</p>
+        </div>
+      </div><!-- End Service Item -->
+
+    </div>
+  </div>
+
+</section><!-- End Services Section -->
+
+
+    
+    
+
+    <!-- Features Section -->
+    <section id="features" class="features section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Features</h2>
+        <p>Efficient and accurate number plate recognition using advanced AI for verification and tracking.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="features-item">
+              <i class="bi bi-search" style="color: #5578ff;"></i>
+          <h3>Advanced Search</h3>
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="features-item">
+              <i class="bi bi-camera-video" style="color: #e80368;"></i>
+          <h3>Detection System</h3>
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="features-item">
+              <i class="bi bi-phone" style="color: #ff6347;"></i>
+              <h3>Multi-Device Compatibility</h3>
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="features-item">
+              <i class="bi bi-database" style="color: #b2904f;"></i>
+              <h3>License Plate Database</h3>
+            </div>
+          </div><!-- End Feature Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Features Section -->
+
+
+    <!-- Faq Section -->
+<section id="faq" class="faq section light-background">
+
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Frequently Asked Questions</h2>
+    <p>Find answers to common questions about our vehicle tracking and number plate recognition system.</p>
+  </div><!-- End Section Title -->
+
+  <div class="container">
+
+    <div class="row faq-item" data-aos="fade-up" data-aos-delay="100">
+      <div class="col-lg-5 d-flex">
+        <i class="bi bi-question-circle"></i>
+        <h4>What is Number Plate Recognition (NPR)?</h4>
+      </div>
+      <div class="col-lg-7">
+        <p>
+          Number Plate Recognition (NPR) is a technology that uses optical character recognition (OCR) to read vehicle license plates, enabling efficient tracking and identification. Our system automates the process using real-time video feeds or image uploads.
+        </p>
+      </div>
+    </div><!-- End F.A.Q Item-->
+
+    <div class="row faq-item" data-aos="fade-up" data-aos-delay="200">
+      <div class="col-lg-5 d-flex">
+        <i class="bi bi-question-circle"></i>
+        <h4>How does the real-time vehicle detection work?</h4>
+      </div>
+      <div class="col-lg-7">
+        <p>
+          The system uses AI-based algorithms to analyze live video streams and detect vehicles in real-time. As the vehicle approaches the camera or sensor, the system identifies and reads the number plate for tracking and verification purposes.
+        </p>
+      </div>
+    </div><!-- End F.A.Q Item-->
+
+    <div class="row faq-item" data-aos="fade-up" data-aos-delay="300">
+      <div class="col-lg-5 d-flex">
+        <i class="bi bi-question-circle"></i>
+        <h4>Can I upload images for vehicle detection?</h4>
+      </div>
+      <div class="col-lg-7">
+        <p>
+          Yes, our system allows you to upload images of vehicles. Once uploaded, the AI system processes the images to detect and read the number plate, providing relevant vehicle details.
+        </p>
+      </div>
+    </div><!-- End F.A.Q Item-->
+
+    <div class="row faq-item" data-aos="fade-up" data-aos-delay="400">
+      <div class="col-lg-5 d-flex">
+        <i class="bi bi-question-circle"></i>
+        <h4>How accurate is the number plate recognition?</h4>
+      </div>
+      <div class="col-lg-7">
+        <p>
+          Our system has high accuracy, thanks to the advanced OCR technology and AI algorithms used for number plate recognition. The accuracy may vary depending on image quality, angle, and lighting conditions.
+        </p>
+      </div>
+    </div><!-- End F.A.Q Item-->
+  </div>
+
+</section><!-- /Faq Section -->
+
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Contact</h2>
+        <p>We'd love to hear from you! Reach out to us for any inquiries, support, or collaboration opportunities.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container position-relative" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-5">
+            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
+              <i class="bi bi-geo-alt flex-shrink-0"></i>
+              <div>
+                <h3>Address</h3>
+                <p>Qasimabad, Hyderabad Sindh, Pakistan 71000</p>
+              </div>
+            </div><!-- End Info Item -->
+
+            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
+              <i class="bi bi-telephone flex-shrink-0"></i>
+              <div>
+                <h3>Call Us</h3>
+                <p>+92 3420 3047 15</p>
+              </div>
+            </div><!-- End Info Item -->
+
+            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
+              <i class="bi bi-envelope flex-shrink-0"></i>
+              <div>
+                <h3>Email Us</h3>
+                <p>Kamranjarwar19@gmail.com</p>
+              </div>
+            </div><!-- End Info Item -->
+
+          </div>
+          <div class="col-lg-6">
+            <form id="contactForm" class="php-email-form" data-aos="fade-up" data-aos-delay="500">
+                <div class="row gy-4">
+        
+                    <div class="col-md-6">
+                        <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                    </div>
+        
+                    <div class="col-md-6">
+                        <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                    </div>
+        
+                    <div class="col-md-12">
+                        <input type="text" class="form-control" name="subject" placeholder="Subject" required>
+                    </div>
+        
+                    <div class="col-md-12">
+                        <textarea class="form-control" name="message" rows="4" placeholder="Message" required></textarea>
+                    </div>
+        
+                    <div class="col-md-12 text-center">
+                        <div class="loading" style="display: none;">Loading...</div>
+                        <div class="sent-message" style="
+                            display: none; 
+                            color: white; 
+                            background: linear-gradient(135deg, #4facfe, #00f2fe); 
+                            padding: 15px 20px; 
+                            border-radius: 15px; 
+                            font-size: 1rem; 
+                            font-weight: bold; 
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+                            text-align: center; 
+                            opacity: 0; 
+                            transform: translateY(-10px); 
+                            transition: opacity 0.5s ease, transform 0.5s ease;">
+                            Message sent successfully!
+                        </div>
+
+        
+                        <button type="submit">Send Message</button>
+                    </div>
+        
+                </div>
+            </form>
+        </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Contact Section -->
+
+  </main>
+
+  <footer id="footer" class="footer">
+
+    <div class="container">
+      <div class="copyright text-center ">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">Plate Check</strong> <span>All Rights Reserved 2025</span></p>
+      </div>
+      <div class="social-links d-flex justify-content-center">
+        <a href=""><i class="bi bi-twitter-x"></i></a>
+        <a href=""><i class="bi bi-facebook"></i></a>
+        <a href=""><i class="bi bi-instagram"></i></a>
+        <a href=""><i class="bi bi-linkedin"></i></a>
+      </div>
+      <!-- <div class="credits">
+        
+        Designed by <a href="">DevHabit Innovations</a>
+      </div> -->
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+  <script>
+    function showInfo() {
+        document.getElementById("infoBox").style.display = "block";
+    }
+    
+    function hideInfo() {
+        document.getElementById("infoBox").style.display = "none";
+    }
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+   // Get the user's authentication status from the Django context
+   const isAuthenticated = '{{ is_authenticated|yesno:"true,false" }}' === 'true';
+   const alertCard = document.getElementById("alert-card");
+   const closeButton = document.getElementById("close-alert");
+
+   // Function to show alert if user is not authenticated
+   function handleUnauthenticatedLink(event) {
+       if (!isAuthenticated) {
+           event.preventDefault(); // Prevent the link from being followed
+           alertCard.classList.add("show"); // Show the alert card
+       }
+   }
+
+   // Get all links that require authentication
+   const authLinks = document.querySelectorAll(".auth-required");
+
+   // Attach click event to all auth-required links
+   authLinks.forEach(link => {
+       link.addEventListener("click", handleUnauthenticatedLink);
+   });
+
+   // Close the alert card when clicking the close button
+   closeButton.addEventListener("click", function() {
+       alertCard.classList.remove("show"); // Hide the alert card
+   });
+});
+
+</script>
+
+<script>
+  document.getElementById("contactForm").addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent the default form submission behavior
+
+      const loadingElement = document.querySelector(".loading");
+      const successMessage = document.querySelector(".sent-message");
+
+      // Display loading message
+      loadingElement.style.display = "block";
+      successMessage.style.display = "none";
+
+      setTimeout(() => {
+          loadingElement.style.display = "none"; // Hide loading message
+          successMessage.style.display = "block"; // Show success message
+          successMessage.style.opacity = "1"; // Ensure visibility for smooth transitions
+
+          // Automatically hide the success message after 10 seconds
+          setTimeout(() => {
+              successMessage.style.opacity = "0"; // Add fade-out effect
+              successMessage.style.transition = "opacity 1s ease"; // Smooth fade-out
+
+              setTimeout(() => {
+                  successMessage.style.display = "none"; // Hide element completely after fade-out
+              }, 1000); // Allow fade-out animation to complete
+          }, 10000); // 10 seconds before fading out
+      }, 2000); // 2 seconds delay for loading message
+  });
+</script>
+
+
+</body>
+
+</html>

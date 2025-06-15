@@ -1,0 +1,21 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+<h1>All Number Plates</h1>
+<table border="1">
+    <tr>
+        <th>Number Plate</th>
+        <th>Vehicle Type</th>
+        <th>Make</th>
+        <th>Action</th>
+    </tr>
+    {% for vehicle in vehicles %}
+    <tr>
+        <td>{{ vehicle.number_plate }}</td>
+        <td>{{ vehicle.vehicle_type }}</td>
+        <td>{{ vehicle.make }}</td>
+        <td><a href="{% url 'vehicle_details' vehicle.id %}" class="button">View Details</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
